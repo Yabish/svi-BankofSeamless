@@ -1,0 +1,92 @@
+<div class="container-fluid">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-sm-8 mt-5">
+      <p class="mb-0 text-end">
+        <b>
+          <span class="text-muted"> Balance </span>
+          {{ avalableBalance | number: "1.2-2" }}
+        </b>
+      </p>
+      <div class="card card-body shadow">
+        <div class="mb-3">
+          <label for="iban-number" class="form-label">
+            <b> IBAN </b>
+          </label>
+          <input
+            type="text"
+            class="form-control is-{{ inputIcon }}"
+            id="iban-number"
+            placeholder="Enter the destination IBAN"
+            style="text-transform: uppercase"
+            [(ngModel)]="iban"
+            [maxlength]="ibanLength"
+            (keyup)="onIbanChange($event)"
+          />
+          <!-- id="partitioned" -->
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <p class="mb-0">
+            <span class="fi fi-{{ ibancc }}" *ngIf="isShowFlag"></span>
+            <span class="text-muted" *ngIf="isShowIbanMessage">
+              <b> {{ ibanMessage }} </b>
+            </span>
+          </p>
+          <img
+            *ngIf="isShowBankLogo"
+            src="{{ ibanImageUrl }}"
+            width="200px"
+            class="img-fluid rounded"
+            alt=""
+          />
+        </div>
+
+        <div *ngIf="isShowCurrency">
+          <div class="my-3">
+            <div class="mb-3">
+              <label for="userInputAmount" class="form-label"> Amount </label>
+              <div class="input-group">
+                <span class="input-group-text" id="inputGroupPrepend">
+                  {{ currency }}
+                </span>
+                <input
+                  type="number"
+                  min="1"
+                  [max]="avalableBalance"
+                  [(ngModel)]="amount"
+                  class="form-control"
+                  id="userInputAmount"
+                  (keyup)="onAmountChange()"
+                  placeholder="Amount"
+                />
+              </div>
+            </div>
+
+            <div class="w-100">
+              <p>
+                <ngb-progressbar
+                  type="success"
+                  [value]="amountPercent"
+                ></ngb-progressbar>
+              </p>
+            </div>
+          </div>
+
+          <div class="d-flex mt-3 justify-content-between">
+            <button class="btn btn-light" (click)="reset()">Cancel</button>
+            <button class="btn btn-success" (click)="transfer()">
+              Transfer 💵
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ngb-alert class="mt-3" type="success" *ngIf="isShowSuccessAlert" [dismissible]="false">
+        <strong>Done!</strong> Transfer Completed.
+      </ngb-alert>
+      <ngb-alert class="mt-3" type="danger" *ngIf="isShowDismissAlert" [dismissible]="false">
+        <strong>Done!</strong> {{alertMessage}}
+      </ngb-alert>
+    </div>
+  </div>
+</div>
